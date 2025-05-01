@@ -57,7 +57,6 @@ namespace EmployeeManagement.Controllers
                 return BadRequest("Please enter valid input employee ID");
             }
 
-
             try
             {
 
