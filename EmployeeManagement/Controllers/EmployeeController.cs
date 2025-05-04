@@ -12,13 +12,19 @@ namespace EmployeeManagement.Controllers
     {
         private EmployeeService _employeeService;
 
+
+        // constructor created for initilizing the objects using DI.
         public EmployeeController(EmployeeService employeeService)
         {
             _employeeService = employeeService;
 
         }
 
-
+        /// <summary>
+        /// This method will insert employee details into database.
+        /// </summary>
+        /// <param name="employeeDetails"></param>
+        /// <returns></returns>
         [HttpPost("AddEmployee")]
         public async Task<IActionResult> AddEmployee([FromBody] EmployeeDetails employeeDetails)
         {
@@ -157,6 +163,7 @@ namespace EmployeeManagement.Controllers
 
             try
             {
+
 
                 bool result = await _employeeService.UpdateEmployeeDetails(EmployeeId, employeeDetails);
 
