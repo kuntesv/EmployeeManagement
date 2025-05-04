@@ -143,5 +143,43 @@ namespace EmployeeManagement.Services
                 }
             }
         }
+
+
+        public async Task<bool> UpdateEmployeeDetails(int id, EmployeeDetails employeeDetails)
+        {
+            string sqlStmt = "UPDATE Employees SET FirstName = @firstName , LastName = @lastName , Email = @email, Salary = @salary, IsActive = @isActive WHERE EmployeeID = @empId;";
+
+            using(SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                await sqlConnection.OpenAsync();
+
+                using(SqlCommand cmd = new SqlCommand(sqlStmt, sqlConnection))
+                {
+
+                    cmd.Parameters.AddWithValue("@firstName", employeeDetails.FirstName);
+                    cmd.Parameters.AddWithValue("@lastName", employeeDetails.LastName);
+                    cmd.Parameters.AddWithValue("@email", employeeDetails.Email);
+                    cmd.Parameters.AddWithValue("@salary", employeeDetails.Salary);
+                    cmd.Parameters.AddWithValue("@isActive", employeeDetails.IsActive);
+                    cmd.Parameters.AddWithValue("@empId", id);
+
+
+                   int rowAffected =  await cmd.ExecuteNonQueryAsync();
+
+                    return rowAffected > 0;
+
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }

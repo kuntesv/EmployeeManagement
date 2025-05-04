@@ -146,7 +146,37 @@ namespace EmployeeManagement.Controllers
 
         }
 
+        [HttpPut("UpdateEmployeeById")]
+        public async Task<IActionResult> UpdateEmployeeById([FromQuery] int EmployeeId , [FromBody] EmployeeDetails employeeDetails)
+        {
 
+            if(EmployeeId < 0 )
+            {
+                return BadRequest($"Invalid employee id provided {EmployeeId}");
+            }
+
+            try
+            {
+
+                bool result = await _employeeService.UpdateEmployeeDetails(EmployeeId, employeeDetails);
+
+                if(result)
+                {
+                    return Ok($"Updated employee details for id {EmployeeId}");
+                }
+                else
+                {
+                    return NotFound($"Employee with ID {EmployeeId} not found");
+                }
+
+            }
+            catch(Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
+
+        }
 
 
 
