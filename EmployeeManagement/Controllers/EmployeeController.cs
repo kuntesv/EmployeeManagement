@@ -122,14 +122,14 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet("GetAllEmployees")]
-        public async Task<IActionResult> GetAllEmployees()
+        public async Task<IActionResult> GetAllEmployees([FromQuery] int limit = 5, [FromQuery] int skip=0)
         {
 
 
             try
             {
 
-                var result = await _employeeService.GetAllEmployeeDetails();
+                var result = await _employeeService.GetAllEmployeeDetails(limit , skip);
 
                 if (result.Any())
                 {

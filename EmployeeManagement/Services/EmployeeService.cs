@@ -1,6 +1,7 @@
 ﻿using EmployeeManagement.Models;
 using System.Data.SqlClient;
 using System.Security.Cryptography.X509Certificates;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EmployeeManagement.Services
 {
@@ -63,8 +64,6 @@ namespace EmployeeManagement.Services
 
         }
 
-
-
         public async Task<EmployeeDetails> GetEmployeeDetailsById(int id)
         {
             string sql = @"SELECT *  FROM Employees WHERE EmployeeID = @Id;";
@@ -107,12 +106,18 @@ namespace EmployeeManagement.Services
 
         }
 
-
-        public async Task<List<EmployeeDetails>> GetAllEmployeeDetails()
+        public async Task<List<EmployeeDetails>> GetAllEmployeeDetails(int limit , int skip)
         {
             List<EmployeeDetails> emps = new List<EmployeeDetails>();
 
-            string sql = @"SELECT *  FROM Employees;";
+            string sql = @"SELECT *  FROM Employees ORDER BY EmployeeID OFFSET @skip ROWS FETCH NEXT @limit ROWS ONLY;";
+
+
+
+//            SELECT* FROM Employees
+//            ORDER BY EmployeeID
+//OFFSET 0 ROWS
+//FETCH NEXT 3 ROWS ONLY;
 
 
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
@@ -122,6 +127,8 @@ namespace EmployeeManagement.Services
 
                 using (SqlCommand cmd = new SqlCommand(sql, sqlConnection))
                 {
+                    cmd.Parameters.AddWithValue("@skip", skip);
+                    cmd.Parameters.AddWithValue("@limit", limit);
 
                     using (SqlDataReader sqlDataReader = await cmd.ExecuteReaderAsync())
                     {
@@ -143,7 +150,6 @@ namespace EmployeeManagement.Services
                 }
             }
         }
-
 
         public async Task<bool> UpdateEmployeeDetails(int id, EmployeeDetails employeeDetails)
         {
@@ -171,13 +177,6 @@ namespace EmployeeManagement.Services
                 }
             }
         }
-
-
-
-
-
-
-
 
 
 
